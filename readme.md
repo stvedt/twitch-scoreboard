@@ -36,8 +36,14 @@ View Logs (should something on the server side goes wrong):
 `heroku logs --tail`
 
 
-## Features to Adds
+## Nest Steps
+- Authentication via Twitch
+- Create User View
+- Create ChatBot Commands
+- Hook up MongoDB
 
+## Features to Adds
+- Update Nav to newer bootstrap version. Later replace with Material Design
 - Create Score View in React and update with Socket.io
 - Add ChatBot Interface with TMI.js
 - Authentication via Twitch.
