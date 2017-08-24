@@ -34,3 +34,16 @@ Open page in web browser (or just navigate to decisionmakingtask.com):
 
 View Logs (should something on the server side goes wrong):
 `heroku logs --tail`
+
+
+## Features to Adds
+
+- Create Score View in React and update with Socket.io
+- Add ChatBot Interface with TMI.js
+- Authentication via Twitch.
+
+
+
+## To Fix
+
+- Only runs locally on Port 5000. Investigate.
