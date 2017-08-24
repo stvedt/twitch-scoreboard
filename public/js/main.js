@@ -12,5 +12,6 @@
   function someFunction(){
     console.log('hi from client js');
   }
-
+  
+  init();
 })();
