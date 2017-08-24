@@ -196,6 +196,38 @@ app.put('/mark-completed/', function(req, res){
   });
 });
 
+/**** Twitch auth *****/
+//Twitch Login Auth
+var passport       = require("passport");
+var twitchStrategy = require("passport-twitch").Strategy;
+
+passport.use(new twitchStrategy({
+    clientID: process.env.TWITCH_CLIENT,
+    clientSecret: process.env.TWITCH_SECRET,
+    callbackURL: "http://127.0.0.1:5000/auth/twitch/callback",
+    redirect_uri:"http://127.0.0.1:5000/",
+    scope: "user_read"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    console.log(profile);
+    /*User.findOrCreate({ twitchId: profile.id }, function (err, user) {
+      return done(err, user);
+    });*/
+    return;
+  }
+));
+
+app.get("/auth/twitch", passport.authenticate("twitch"));
+app.get("/auth/twitch/callback", passport.authenticate("twitch", { failureRedirect: "/" }), function(req, res) {
+    // Successful authentication, redirect home.
+    console.log('have auth');
+    res.redirect("/");
+});
+
+
+
+
+
 app.listen(app.get('port'), function() {
   console.log('Node app is running a local server at http://localhost:', app.get('port'));
 });
