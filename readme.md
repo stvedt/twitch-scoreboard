@@ -17,6 +17,9 @@ Start MongoDB (in own terminal window)
 Make sure NodeJS dependencies are installed with NPM. (only run this if dependencies have changed)
 `npm install`
 
+Local Run without Heroku
+`npm start`
+
 Local Run with Heroku
 `heroku local web`
 
