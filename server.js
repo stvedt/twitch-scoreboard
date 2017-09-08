@@ -7,11 +7,14 @@ var express = require('express');
 var mongoose = require('mongoose');
 var timestamps = require('mongoose-timestamp');
 var app = express();
+var bot = require('./bot');
+
+bot();
 
 dotenv.load();
 // var HerokuDB = require('./keys/mlab');
 // console.log(HerokuDB);
-// console.log(process.env);
+console.log(process.env);
 app.set('port', process.env.PORT);
 app.use(express.static(__dirname + '/public'));
 // view engine setup - If using a templating language
