@@ -20,8 +20,11 @@
 
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        Welcome, <%= user %>.
-        <a class="nav-link btn btn-secondary" href="/auth/twitch/">Log In with Twitch</a>
+        <% if (loggedIn) { %>
+          Welcome, <%= user %>.
+        <% } else { %>
+          <a class="nav-link btn btn-secondary" href="/auth/twitch/">Log In with Twitch</a>
+        <% } %>
       </li>
     </ul>
   </div>
