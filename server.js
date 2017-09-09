@@ -60,7 +60,13 @@ app.use(function(err, req, res, next) {
 app.get('/', function(req, res) {
   console.log('session: ',req.session);
   console.log('req.user: ',req.session.user);
-  res.render('pages/index', { user: req.session.user });
+
+  if(typeof req.session.user !== 'undefined'){
+    console.log('req.user.displayName: ',req.session.user.displayName);
+    res.render('pages/index', { loggedIn: true, user: req.session.user.displayName });
+  } else {
+    res.render('pages/index', { loggedIn: false, user: req.session.user });
+  }
 });
 
 /**** Twitch auth *****/
@@ -87,7 +93,7 @@ passport.use(new twitchStrategy({
 passport.serializeUser(function(user, done) {
   console.log('serializeUser');
   //console.log(user.username);
-   done(null, user.username);
+   done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
@@ -101,7 +107,7 @@ app.get("/auth/twitch/callback", passport.authenticate("twitch", {
  }), function(req, res) {
     // Successful authentication, redirect home.
     console.log('Succesfully Authenticated', req.user);
-    req.session.user = req.user.username;
+    req.session.user = req.user;
     res.redirect("/");
 });
 
