@@ -121,25 +121,25 @@ app.get("/auth/twitch/callback", passport.authenticate("twitch", {
     req.session.user = req.user;
 
     //check if user exists and update
-    /*User.findOne({ username: req.user.username }, function (err, doc){
+    User.findOne({ username: req.user.username }, function (err, doc){
       console.log('found user',doc);
 
-
-      //doc = req.user
-      doc.markModified('');
-      doc.save();
-      return;
-      //res.json(doc.results.total_amount);
-    });*/
-    //create new user
-    var currentUser = new User (
-      req.user
-    );
-    currentUser.save(function (err) {
-      if (err) {
-        console.log(err);
+      if (doc === null ){
+        //create new user
+        var currentUser = new User (
+          req.user
+        );
+        currentUser.save(function (err) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log('successfully saved to mongo');
+          }
+        });
       } else {
-        console.log('successfully saved to mongo');
+        doc = Object.assign(doc, req.user);
+        doc.markModified(doc);
+        doc.save();
       }
     });
 
