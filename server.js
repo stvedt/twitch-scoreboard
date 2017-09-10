@@ -2,7 +2,6 @@ var dotenv = require('dotenv');
 var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
 var express = require('express');
 var session = require('express-session');
 var mongoose = require('mongoose');
@@ -11,15 +10,12 @@ var app = express();
 var bot = require('./bot');
 
 bot();
-
 dotenv.load();
-// var HerokuDB = require('./keys/mlab');
-// console.log(HerokuDB);
-//console.log(process.env);
+
 app.set('port', process.env.PORT);
 app.use(express.static(__dirname + '/public'));
+app.use(session({secret: 'stream-score-its-secret'}));
 
-app.use(session({secret: 'ssshhhhh'}));
 // view engine setup - If using a templating language
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -29,10 +25,25 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(cookieParser());
 
 //mongoose
 mongoose.connect(process.env.MONGODB_URI);
+var userSchema = mongoose.Schema({
+  id: Number,
+  username: String,
+  displayName: String,
+  email: String,
+  teamName: String,
+  currentScore : {
+    type: Object,
+    opponent: String,
+    wins: Number,
+    losses: Number,
+    ties: Number
+  }
+});
+
+var User = mongoose.model('User', userSchema);
 
 // development error handler
 // will print stacktrace
@@ -108,6 +119,30 @@ app.get("/auth/twitch/callback", passport.authenticate("twitch", {
     // Successful authentication, redirect home.
     console.log('Succesfully Authenticated', req.user);
     req.session.user = req.user;
+
+    //check if user exists and update
+    /*User.findOne({ username: req.user.username }, function (err, doc){
+      console.log('found user',doc);
+
+
+      //doc = req.user
+      doc.markModified('');
+      doc.save();
+      return;
+      //res.json(doc.results.total_amount);
+    });*/
+    //create new user
+    var currentUser = new User (
+      req.user
+    );
+    currentUser.save(function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('successfully saved to mongo');
+      }
+    });
+
     res.redirect("/");
 });
 
