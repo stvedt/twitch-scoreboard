@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <% include ../partials/head.ejs %>
+    <title>Twitch Scoreboard</title>
+  </head>
+  <body>
+    <% include ../partials/header.ejs %>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1><%= user.displayName %></h1>
+                <a href="https://twitch.tv/<%= user.username %>" target="_blank">Twitch Channel</a>
+            </div>
+            <div class="col-md-6">
+                <h2>Past Teams:</h2>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h2> Scrim History</h2>
+            </div>
+        </div>
+    </div><!-- /.container -->
+
+    <% include ../partials/footer.ejs %>
+
+    <% include ../partials/footer-scripts.ejs %>
+  </body>
+</html>
