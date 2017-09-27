@@ -2,6 +2,10 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
+header {
+  margin-bottom: 20px;
+}
+
 .command-list { padding-left: 20px; }
 .command { margin-bottom: 30px; }
 .command h3 { margin-bottom: 0; }

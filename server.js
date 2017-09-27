@@ -63,6 +63,11 @@ app.get('/', function(req, res) {
   }
 });
 
+//connect user routes
+
+var userRoutes = require('./routes/users');
+app.use('/user', userRoutes);
+
 /**** Twitch auth *****/
 //Twitch Login Auth
 var passport       = require("passport");
