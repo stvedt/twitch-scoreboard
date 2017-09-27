@@ -11,12 +11,11 @@
   </head>
   <body>
     <h1>
-        <span class="wins"><%= player.score %></span>
+        <span class="wins"><%= user.currentScore.wins %></span>
          -
-        <span class="losses"><%= opponent.score %></span>
+        <span class="losses"><%= user.currentScore.losses %></span>
     </h1>
     <p>vs.</p>
-    <h2 class="opponent"><%= opponent.teamName %></h2>
 
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
