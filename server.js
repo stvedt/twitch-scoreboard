@@ -8,7 +8,7 @@ var session = require('express-session');
 var app = express();
 var bot = require('./bot');
 var db = require('./db');
-var UserModel = require('./models/UserModel');
+var Service = require('./service');
 
 bot();
 dotenv.load();
@@ -104,27 +104,7 @@ app.get("/auth/twitch/callback", passport.authenticate("twitch", {
     req.session.user = req.user;
 
     //check if user exists and update
-    UserModel.findOne({ username: req.user.username }, function (err, doc){
-      console.log('found user',doc);
-
-      if (doc === null ){
-        //create new user
-        var currentUser = new User (
-          req.user
-        );
-        currentUser.save(function (err) {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log('successfully saved to mongo');
-          }
-        });
-      } else {
-        doc = Object.assign(doc, req.user);
-        doc.markModified(doc);
-        doc.save();
-      }
-    });
+    Service.logInUser(req.user);
 
     res.redirect("/");
 });
