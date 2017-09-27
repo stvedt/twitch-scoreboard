@@ -4,10 +4,11 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var express = require('express');
 var session = require('express-session');
-var mongoose = require('mongoose');
-var timestamps = require('mongoose-timestamp');
+
 var app = express();
 var bot = require('./bot');
+var db = require('./db');
+var UserModel = require('./models/UserModel');
 
 bot();
 dotenv.load();
@@ -26,24 +27,6 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//mongoose
-mongoose.connect(process.env.MONGODB_URI);
-var userSchema = mongoose.Schema({
-  id: Number,
-  username: String,
-  displayName: String,
-  email: String,
-  teamName: String,
-  currentScore : {
-    type: Object,
-    opponent: String,
-    wins: Number,
-    losses: Number,
-    ties: Number
-  }
-});
-
-var User = mongoose.model('User', userSchema);
 
 // development error handler
 // will print stacktrace
@@ -69,11 +52,11 @@ app.use(function(err, req, res, next) {
 });
 
 app.get('/', function(req, res) {
-  console.log('session: ',req.session);
-  console.log('req.user: ',req.session.user);
+  // console.log('session: ',req.session);
+  // console.log('req.user: ',req.session.user);
 
   if(typeof req.session.user !== 'undefined'){
-    console.log('req.user.displayName: ',req.session.user.displayName);
+    // console.log('req.user.displayName: ',req.session.user.displayName);
     res.render('pages/index', { loggedIn: true, user: req.session.user.displayName });
   } else {
     res.render('pages/index', { loggedIn: false, user: req.session.user });
@@ -121,7 +104,7 @@ app.get("/auth/twitch/callback", passport.authenticate("twitch", {
     req.session.user = req.user;
 
     //check if user exists and update
-    User.findOne({ username: req.user.username }, function (err, doc){
+    UserModel.findOne({ username: req.user.username }, function (err, doc){
       console.log('found user',doc);
 
       if (doc === null ){
