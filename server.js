@@ -52,21 +52,22 @@ app.use(function(err, req, res, next) {
 });
 
 app.get('/', function(req, res) {
-  // console.log('session: ',req.session);
-  // console.log('req.user: ',req.session.user);
-
   if(typeof req.session.user !== 'undefined'){
-    // console.log('req.user.displayName: ',req.session.user.displayName);
     res.render('pages/index', { loggedIn: true, user: req.session.user.displayName });
   } else {
     res.render('pages/index', { loggedIn: false, user: req.session.user });
   }
 });
 
-//connect user routes
-
-var userRoutes = require('./routes/users');
-app.use('/user', userRoutes);
+app.get('/user/:userName', function(req, res) {
+  //get user data then render view;
+  //var userData = Service.getUser(req.params.userName); // will need some async handling
+  var userData = { currentScore:{
+    wins: 2,
+    losses: 0
+  }};
+  res.render('pages/user-score', { user: userData });
+});
 
 /**** Twitch auth *****/
 //Twitch Login Auth
@@ -110,6 +111,7 @@ app.get("/auth/twitch/callback", passport.authenticate("twitch", {
 
     //check if user exists and update
     Service.logInUser(req.user);
+    Service.updateScoreWin(req.user.username);
 
     res.redirect("/");
 });
